@@ -1,0 +1,32 @@
+// ======================================
+
+prouciti:
+
+-joystick               ()
+-buzzer                 (PWM)
+-pin headers
+-DIP switches
+-reset button
+-RGB LED'S              (PWM, GPIO) get_started/blink
+-RGB LED                (PWM, GPIO) get_started/blink
+-accelerometer          (I2C, SPI)
+-RTC                    (I2C)
+-temperature sensors    (I2C)
+-buttons                (GPIO)
+
+optional:
+-on/off
+-WS LED
+-port expander header
+-osciloscope points
+-SWD header
+-EEPROM
+
+skuziti:
+-blink
+-tasks
+-system/freertos/real_time_stats
+-system/freertos/queue
+-wifi/getting_started/station
+-protocols/mqtt
+-storage/nvs
