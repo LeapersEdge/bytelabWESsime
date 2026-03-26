@@ -68,9 +68,9 @@ If you want to start from the provided demo UI instead of creating a new one:
    `components/ui_app/squareline/project/`  
 4. Select the `.spj` file (for example `esp32_gui.spj`) and open it.  
 5. Check **Project Settings → FILE EXPORT** and verify that:
-   - **Project Export Root** is `components/ui_app/squareline/project/`  
-   - **UI Files Export Path** is `components/ui_app/squareline/`
-
+   - **Project Export Root** is `components/ui_app/squareline/`
+   - **UI Files Export Path** is `components/ui_app/squareline/project/`  
+   
 After that, you can modify the UI, then use **Export UI files** to update the C code used by this ESP-IDF project.
 
 ---
