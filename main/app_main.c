@@ -32,13 +32,15 @@ static void sime_task(void *arg) {
     }
 }
 
+static volatile char test[3 * 240 * 320];
+
 void app_main(void) {
     ESP_ERROR_CHECK(nvs_flash_init());
 
     wifi_init_sta();
     gui_init();
     wifi_sync_time_from_network();
-
+   test[0] = '1';
     /*
      * Wait until network time becomes valid.
      */

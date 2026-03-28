@@ -311,16 +311,14 @@ void ui_init(void)
     lv_theme_t * theme = lv_theme_default_init(dispp, lv_palette_main(LV_PALETTE_BLUE), lv_palette_main(LV_PALETTE_RED),
                                                false, LV_FONT_DEFAULT);
     lv_disp_set_theme(dispp, theme);
-    ui_Home_Scr_screen_init();
-    ui_Color_Scr_screen_init();
-    ui_Settings_Scr_screen_init();
+    ui_SimeAppsScr_screen_init();
+    ui_CallScr_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
-    lv_disp_load_scr(ui_Home_Scr);
+    lv_disp_load_scr(ui_SimeAppsScr);
 }
 
 void ui_destroy(void)
 {
-    ui_Home_Scr_screen_destroy();
-    ui_Color_Scr_screen_destroy();
-    ui_Settings_Scr_screen_destroy();
+    ui_SimeAppsScr_screen_destroy();
+    ui_CallScr_screen_destroy();
 }
