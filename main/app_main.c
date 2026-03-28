@@ -59,8 +59,8 @@ void app_main(void) {
     /*
      * Optional test calls
      */
-    sime_feed_half();
-    sime_clean();
+   //  sime_feed_half();
+   //  sime_clean();
 
     xTaskCreate(
         sime_task,
