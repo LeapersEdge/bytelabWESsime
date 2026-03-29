@@ -1,5 +1,7 @@
 #ifndef _WIFI_H
 #define _WIFI_H
+#define CONFIG_WIFI_STATION_SSID "Bird"
+#define CONFIG_WIFI_STATION_PASSWORD "BIRD*2025*"
 
 #include <time.h>
 

@@ -17,6 +17,13 @@
 #include "gui.h"
 #include "wifi.h"
 #include "sime.h"
+#include "https_server.h"
+#include "intercom_audio.h"
+
+#include "esp_heap_caps.h"
+#include "esp_system.h"
+
+
 
 static const char *TAG = "MAIN";
 
@@ -32,9 +39,7 @@ static void sime_task(void *arg) {
     }
 }
 
-void app_main(void) {
-    ESP_ERROR_CHECK(nvs_flash_init());
-
+void app_main(void) { ESP_ERROR_CHECK(nvs_flash_init());
     wifi_init_sta();
     gui_init();
     wifi_sync_time_from_network();
@@ -50,7 +55,18 @@ void app_main(void) {
     ESP_LOGI(TAG, "Network time ready: %lld",
              (long long)wifi_get_network_time());
 
-    sime_init();
+    ESP_LOGI(TAG, "Free heap before HTTPS start: %u", (unsigned)esp_get_free_heap_size());
+    ESP_LOGI(TAG, "Min free heap before HTTPS start: %u", (unsigned)esp_get_minimum_free_heap_size());
+
+    ESP_ERROR_CHECK(https_server_start());
+
+    ESP_LOGI(TAG, "Free heap after HTTPS start: %u", (unsigned)esp_get_free_heap_size());
+    ESP_LOGI(TAG, "Min free heap after HTTPS start: %u", (unsigned)esp_get_minimum_free_heap_size());
+
+    ESP_ERROR_CHECK(intercom_audio_init());
+
+    ESP_LOGI(TAG, "Free heap after intercom init: %u", (unsigned)esp_get_free_heap_size());
+    ESP_LOGI(TAG, "Min free heap after intercom init: %u", (unsigned)esp_get_minimum_free_heap_size());
 
     ESP_LOGI(TAG, "Initial Sime status: HP=%d, Mood=%s",
              sime_get_hp(),
@@ -62,12 +78,12 @@ void app_main(void) {
    //  sime_feed_half();
    //  sime_clean();
 
-    xTaskCreate(
-        sime_task,
-        "sime_task",
-        4096,
-        NULL,
-        5,
-        NULL
-    );
+    // xTaskCreate(
+    //     sime_task,
+    //     "sime_task",
+    //     4096,
+    //     NULL,
+    //     5,
+    //     NULL
+    // );
 }
