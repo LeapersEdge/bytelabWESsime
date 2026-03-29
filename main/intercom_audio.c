@@ -24,7 +24,7 @@
 #define INTERCOM_DOUT_IO          GPIO_NUM_27
 
 #define INTERCOM_RINGBUF_SIZE     (8 * 1024)
-#define INTERCOM_TASK_STACK       8192
+#define INTERCOM_TASK_STACK       4096
 #define INTERCOM_TASK_PRIO        8
 
 static const char *TAG = "INTERCOM_AUDIO";
