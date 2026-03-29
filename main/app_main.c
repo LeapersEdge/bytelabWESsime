@@ -17,57 +17,58 @@
 #include "gui.h"
 #include "wifi.h"
 #include "sime.h"
+#include "audio.h"
+#include "driver/gpio.h"
 
-static const char *TAG = "MAIN";
+#define BUTTON_PIN   GPIO_NUM_25   // ← REPLACE with the exact GPIO from peripheral_module_schematic.PDF for BTN4
+// Usually active-low with internal pull-up
 
-static void sime_task(void *arg) {
+static void button_task(void *arg)
+{
+
+    gpio_config_t io_conf = {
+        .pin_bit_mask = (1ULL << BUTTON_PIN),
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_ENABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE
+    };
+    gpio_config(&io_conf);
+
+    
+    //bool last_state = 1;        // start assuming not pressed (high)
+    last_state = gpio_get_level(BUTTON_PIN); // immediately read button state on start
     while (1) {
-        sime_poll();
+        bool current = gpio_get_level(BUTTON_PIN);
 
-        ESP_LOGI(TAG, "Sime status: HP=%d, Mood=%s",
-                 sime_get_hp(),
-                 sime_get_mood_str());
+        // Detect falling edge (press) with simple debounce
+        if (current != last_state) {
+            vTaskDelay(pdMS_TO_TICKS(50));           // debounce time
+            current = gpio_get_level(BUTTON_PIN);    // re-read after debounce
 
-        vTaskDelay(pdMS_TO_TICKS(1000));
+            if (current != last_state) {             // still changed → valid edge
+                last_state = current;
+
+                if (current == 0) {                  // BTN4 pressed (active-low)
+                    //audio_play(AUDIO_PRIORITY_MUSIC, 1);   // Song 1 at music priority
+                    audio_play(AUDIO_PRIORITY_NOTIFICATION, 7);
+                    // You can change to AUDIO_PRIORITY_NOTIFICATION, 0 for the notification beep instead
+                }
+            }
+        }
+        vTaskDelay(pdMS_TO_TICKS(20));   // polling rate (fast enough, low CPU)
     }
 }
 
 void app_main(void) {
     ESP_ERROR_CHECK(nvs_flash_init());
 
-    wifi_init_sta();
     gui_init();
-    wifi_sync_time_from_network();
 
-    /*
-     * Wait until network time becomes valid.
-     */
-    while (wifi_get_network_time() == 0) {
-        ESP_LOGI(TAG, "Waiting for network time...");
-        vTaskDelay(pdMS_TO_TICKS(1000));
-    }
+    audio_init();
+    audio_play(AUDIO_PRIORITY_NOTIFICATION, 2);   // 2 = boot sound clip
 
-    ESP_LOGI(TAG, "Network time ready: %lld",
-             (long long)wifi_get_network_time());
+    // Task to play audio
+    xTaskCreate(button_task, "btn_task", 4096, NULL, 4, NULL);
 
-    sime_init();
-
-    ESP_LOGI(TAG, "Initial Sime status: HP=%d, Mood=%s",
-             sime_get_hp(),
-             sime_get_mood_str());
-
-    /*
-     * Optional test calls
-     */
-   //  sime_feed_half();
-   //  sime_clean();
-
-    xTaskCreate(
-        sime_task,
-        "sime_task",
-        4096,
-        NULL,
-        5,
-        NULL
-    );
 }

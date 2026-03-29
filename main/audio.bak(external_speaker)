@@ -1,0 +1,187 @@
+#include "audio.h"
+#include <math.h>
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/queue.h"
+
+#define I2S_PORT              I2S_NUM_0
+#define SAMPLE_RATE           22050
+#define I2S_BCLK_PIN          GPIO_NUM_25
+#define I2S_WS_PIN            GPIO_NUM_26
+#define I2S_DOUT_PIN          GPIO_NUM_27
+
+i2s_chan_handle_t tx_handle = NULL;
+float audio_master_volume = 0.8f;   // Change this to adjust volume (re-flash to test)
+
+static QueueHandle_t audio_queue = NULL;
+
+typedef struct {
+    AudioPriority priority;
+    int clip_id;
+} AudioRequest_t;
+
+// Simple note definition for melodies
+typedef struct {
+    float freq_hz;
+    uint32_t duration_ms;
+} Note_t;
+
+// Notification: 2 notes in ~1 second (440 Hz then 523 Hz, total ~800 ms + tiny silence)
+static const Note_t notification_clip[] = {
+    {440.0f, 400},
+    {523.0f, 400}
+};
+static const int notification_len = 2;
+
+// Song 1: Short ascending C-major (very cheerful, ~2 s)
+static const Note_t song1[] = {
+    {261.63f, 300}, {293.66f, 300}, {329.63f, 300}, {349.23f, 300}, {392.00f, 400}
+};
+static const int song1_len = 5;
+
+// Song 2: Short descending (calm, ~2 s)
+static const Note_t song2[] = {
+    {392.00f, 300}, {349.23f, 300}, {329.63f, 300}, {293.66f, 300}, {261.63f, 400}
+};
+static const int song2_len = 5;
+
+// Song 3: Arpeggio-style (energetic, ~2.5 s)
+static const Note_t song3[] = {
+    {261.63f, 250}, {329.63f, 250}, {392.00f, 250}, {523.25f, 250},
+    {392.00f, 300}, {329.63f, 300}
+};
+static const int song3_len = 6;
+
+static volatile AudioPriority current_priority = 0;
+static volatile bool stop_playback = false;
+
+static void IRAM_ATTR play_melody(const Note_t *notes, int len, float volume_scale)
+{
+    stop_playback = false;
+    int16_t buffer[256];  // Small DMA-friendly buffer
+
+    for (int n = 0; n < len && !stop_playback; n++) {
+        float freq = notes[n].freq_hz;
+        uint32_t samples = (notes[n].duration_ms * SAMPLE_RATE) / 1000;
+
+        double phase = 0.0;
+        double phase_inc = 2.0 * M_PI * freq / SAMPLE_RATE;
+
+        for (uint32_t i = 0; i < samples && !stop_playback; i += sizeof(buffer)/sizeof(int16_t)) {
+            int to_write = (samples - i < sizeof(buffer)/sizeof(int16_t)) ?
+                           (samples - i) : (sizeof(buffer)/sizeof(int16_t));
+
+            for (int j = 0; j < to_write; j++) {
+                int16_t sample = (int16_t)(32767.0f * volume_scale * audio_master_volume * sin(phase));
+                buffer[j] = sample;  // Mono
+                phase += phase_inc;
+                if (phase > 2.0 * M_PI) phase -= 2.0 * M_PI;
+            }
+
+            size_t bytes_written = 0;
+            i2s_channel_write(tx_handle, buffer, to_write * sizeof(int16_t), &bytes_written, pdMS_TO_TICKS(100));
+        }
+        // Tiny silence between notes (optional, makes it sound more musical)
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
+
+static void audio_task(void *arg)
+{
+    AudioRequest_t req;
+    while (1) {
+        if (xQueueReceive(audio_queue, &req, portMAX_DELAY) == pdTRUE) {
+            // Priority handling: higher priority (lower number) preempts
+            if (req.priority < current_priority || current_priority == 0) {
+                stop_playback = true;  // Stop whatever is playing
+                vTaskDelay(pdMS_TO_TICKS(10));  // Give time to stop
+                current_priority = req.priority;
+
+                const Note_t *clip = NULL;
+                int clip_len = 0;
+                switch (req.clip_id) {
+                    case 0:  // Notification
+                        clip = notification_clip;
+                        clip_len = notification_len;
+                        break;
+                    case 1:
+                        clip = song1;
+                        clip_len = song1_len;
+                        break;
+                    case 2:
+                        clip = song2;
+                        clip_len = song2_len;
+                        break;
+                    case 3:
+                        clip = song3;
+                        clip_len = song3_len;
+                        break;
+                    default:
+                        continue;
+                }
+                play_melody(clip, clip_len, 1.0f);
+                current_priority = 0;  // Done
+            }
+            // Else: lower priority request is ignored while something higher plays
+        }
+    }
+}
+
+void audio_init(void)
+{
+    // I2S channel config
+    i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(I2S_PORT, I2S_ROLE_MASTER);
+    ESP_ERROR_CHECK(i2s_new_channel(&chan_cfg, &tx_handle, NULL));
+
+    i2s_std_config_t std_cfg = {
+        .clk_cfg = I2S_STD_CLK_DEFAULT_CONFIG(SAMPLE_RATE),
+        .slot_cfg = I2S_STD_PHILIPS_SLOT_DEFAULT_CONFIG(16, I2S_SLOT_MODE_MONO),
+        .gpio_cfg = {
+            .bclk = I2S_BCLK_PIN,
+            .ws   = I2S_WS_PIN,
+            .dout = I2S_DOUT_PIN,
+            .din  = I2S_GPIO_UNUSED,
+            .mclk = I2S_GPIO_UNUSED,
+        },
+    };
+    ESP_ERROR_CHECK(i2s_channel_init_std_mode(tx_handle, &std_cfg));
+    ESP_ERROR_CHECK(i2s_channel_enable(tx_handle));
+
+    audio_queue = xQueueCreate(5, sizeof(AudioRequest_t));
+    xTaskCreate(audio_task, "audio_task", 4096, NULL, 5, NULL);
+    printf("Audio system initialized (volume = %.1f)\n", audio_master_volume);
+}
+
+void audio_play(AudioPriority priority, int clip_id)
+{
+    AudioRequest_t req = {.priority = priority, .clip_id = clip_id};
+    xQueueSend(audio_queue, &req, pdMS_TO_TICKS(10));
+}
+
+void audio_stop(void)
+{
+    stop_playback = true;
+}
+
+#define BUTTON_PIN   GPIO_NUM_??   // ← REPLACE with the exact GPIO from peripheral_module_schematic.PDF for BTN4
+// Usually active-low with internal pull-up
+
+static void button_task(void *arg)
+{
+    gpio_config_t io_conf = {
+        .pin_bit_mask = (1ULL << BUTTON_PIN),
+        .mode = GPIO_MODE_INPUT,
+        .pull_up_en = GPIO_PULLUP_ENABLE,
+        .pull_down_en = GPIO_PULLDOWN_DISABLE,
+        .intr_type = GPIO_INTR_DISABLE
+    };
+    gpio_config(&io_conf);
+
+    while (1) {
+        if (gpio_get_level(BUTTON_PIN) == 0) {  // Pressed
+            audio_play(AUDIO_PRIORITY_MUSIC, 1);  // Plays Song 1 at music priority
+            vTaskDelay(pdMS_TO_TICKS(300));  // Simple debounce + prevent repeat
+        }
+        vTaskDelay(pdMS_TO_TICKS(50));
+    }
+}
