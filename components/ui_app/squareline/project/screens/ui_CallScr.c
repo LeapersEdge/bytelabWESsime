@@ -66,7 +66,7 @@ void ui_CallScr_screen_init(void)
     lv_obj_clear_flag(ui_MamaLabel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_SpoodermanLabel2 = lv_img_create(ui_CallScr);
-    lv_img_set_src(ui_SpoodermanLabel2, &ui_img_spooderman_png);
+    lv_img_set_src(ui_SpoodermanLabel2, &ui_img_vila_png);
     lv_obj_set_width(ui_SpoodermanLabel2, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_height(ui_SpoodermanLabel2, LV_SIZE_CONTENT);    /// 1
     lv_obj_set_x(ui_SpoodermanLabel2, -68);
@@ -76,7 +76,7 @@ void ui_CallScr_screen_init(void)
     lv_obj_clear_flag(ui_SpoodermanLabel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
     ui_BarbiLabel2 = lv_img_create(ui_CallScr);
-    lv_img_set_src(ui_BarbiLabel2, &ui_img_barbi_png);
+    lv_img_set_src(ui_BarbiLabel2, &ui_img_oz_png);
     lv_obj_set_height(ui_BarbiLabel2, 84);
     lv_obj_set_width(ui_BarbiLabel2, LV_SIZE_CONTENT);   /// 1
     lv_obj_set_x(ui_BarbiLabel2, -68);

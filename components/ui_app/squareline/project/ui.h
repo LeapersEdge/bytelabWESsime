@@ -48,13 +48,11 @@ LV_IMG_DECLARE(ui_img_sime_dying_png);    // assets/sime_dying.png
 LV_IMG_DECLARE(ui_img_music_note_png);    // assets/music_note.png
 LV_IMG_DECLARE(ui_img_tata_png);    // assets/Tata.png
 LV_IMG_DECLARE(ui_img_mama_png);    // assets/Mama.png
-LV_IMG_DECLARE(ui_img_spooderman_png);    // assets/Spooderman.png
-LV_IMG_DECLARE(ui_img_barbi_png);    // assets/Barbi.png
+LV_IMG_DECLARE(ui_img_vila_png);    // assets/Vila.png
+LV_IMG_DECLARE(ui_img_oz_png);    // assets/Oz.png
 LV_IMG_DECLARE(ui_img_unselected_phone_red_png);    // assets/unselected_phone_red.png
 LV_IMG_DECLARE(ui_img_kontakti_png);    // assets/Kontakti.png
 LV_IMG_DECLARE(ui_img_unselected_back_arrow_png);    // assets/unselected_back_arrow.png
-LV_IMG_DECLARE(ui_img_oz_png);    // assets/Oz.png
-LV_IMG_DECLARE(ui_img_vila_png);    // assets/Vila.png
 LV_IMG_DECLARE(ui_img_parentallock_png);    // assets/ParentalLock.png
 LV_IMG_DECLARE(ui_img_rowboat_png);    // assets/rowboat.png
 LV_IMG_DECLARE(ui_img_oar_png);    // assets/oar.png

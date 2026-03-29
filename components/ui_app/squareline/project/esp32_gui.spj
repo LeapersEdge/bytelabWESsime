@@ -3666,7 +3666,7 @@
               {
                 "nid": 1020,
                 "strtype": "IMAGE/Asset",
-                "strval": "assets/Spooderman.png",
+                "strval": "assets/Vila.png",
                 "InheritedType": 5
               },
               {
@@ -3834,7 +3834,7 @@
               {
                 "nid": 1020,
                 "strtype": "IMAGE/Asset",
-                "strval": "assets/Barbi.png",
+                "strval": "assets/Oz.png",
                 "InheritedType": 5
               },
               {
@@ -12433,7 +12433,7 @@
     "theme_color1": 5,
     "theme_color2": 0,
     "custom_variable_prefix": "uic",
-    "backup_cnt": 72,
+    "backup_cnt": 73,
     "autosave_cnt": 0,
     "group_color_cnt": 0,
     "lvgl_version": "8.3.6",
