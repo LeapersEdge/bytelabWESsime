@@ -15,9 +15,14 @@ extern void ui_CallScr_screen_init(void);
 extern void ui_CallScr_screen_destroy(void);
 extern lv_obj_t * ui_CallScr;
 extern lv_obj_t * ui_BackgroundGradient;
-extern lv_obj_t * ui_ContactLabel;
-extern lv_obj_t * ui_DurationLabel;
-extern lv_obj_t * ui_HangBttn;
+extern lv_obj_t * ui_TataLabel2;
+extern lv_obj_t * ui_MamaLabel2;
+extern lv_obj_t * ui_SpoodermanLabel2;
+extern lv_obj_t * ui_BarbiLabel2;
+extern lv_obj_t * ui_Image2;
+extern void ui_event_ExitContactsBttn2(lv_event_t * e);
+extern lv_obj_t * ui_ExitContactsBttn2;
+extern lv_obj_t * ui_SimeNeutralImg3;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

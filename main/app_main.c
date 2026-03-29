@@ -15,32 +15,39 @@
 #include "esp_netif_sntp.h"
 #include "esp_log.h"
 #include "gui.h"
-#include "wifi.h"
-#include "sime.h"
+#include "ui_app/wifi.h"
+#include "ui_app/app_state.h"
+#include "ui_app/sime.h"
+#include "ui_app/rowing_game.h"
+#include "ui_app/audio.h"
+#include "ui_app/https_server.h"
+#include "ui_app/intercom_audio.h"
+#include "ui_app/parental_lock.h"
 
 static const char *TAG = "MAIN";
 
 static void sime_task(void *arg) {
     while (1) {
         sime_poll();
+        // parental_lock_poll();
 
-        ESP_LOGI(TAG, "Sime status: HP=%d, Mood=%s",
-                 sime_get_hp(),
-                 sime_get_mood_str());
+        // ESP_LOGI(TAG, "Sime status: HP=%d, Mood=%s",
+        //          sime_get_hp(),
+        //          sime_get_mood_str());
 
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
-
-static volatile char test[3 * 240 * 320];
 
 void app_main(void) {
     ESP_ERROR_CHECK(nvs_flash_init());
 
     wifi_init_sta();
     gui_init();
+    rowing_game_init();
+    audio_init();
     wifi_sync_time_from_network();
-   test[0] = '1';
+    
     /*
      * Wait until network time becomes valid.
      */
@@ -58,11 +65,11 @@ void app_main(void) {
              sime_get_hp(),
              sime_get_mood_str());
 
-    /*
-     * Optional test calls
-     */
-   //  sime_feed_half();
-   //  sime_clean();
+    ESP_ERROR_CHECK(https_server_start());
+    ESP_ERROR_CHECK(intercom_audio_init());
+
+   set_app_state(APP_STATE_HOME_SCREEN);
+   parental_lock_init();
 
     xTaskCreate(
         sime_task,

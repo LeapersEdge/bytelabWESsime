@@ -20,6 +20,11 @@ extern "C" {
 
 #include "screens/ui_SimeAppsScr.h"
 #include "screens/ui_CallScr.h"
+#include "screens/ui_IntercomScr.h"
+#include "screens/ui_ContactsScr.h"
+#include "screens/ui_FeedingCameraScr.h"
+#include "screens/ui_ParentalLockScr.h"
+#include "screens/ui_RowingGameScr.h"
 
 ///////////////////// VARIABLES ////////////////////
 
@@ -39,22 +44,20 @@ LV_IMG_DECLARE(ui_img_background_png);    // assets/background.png
 LV_IMG_DECLARE(ui_img_sime_dirty_lines_png);    // assets/sime_dirty_lines.png
 LV_IMG_DECLARE(ui_img_sime_happy_png);    // assets/sime_happy.png
 LV_IMG_DECLARE(ui_img_sime_neutral_png);    // assets/sime_neutral.png
-LV_IMG_DECLARE(ui_img_sime_sad_png);    // assets/sime_sad.png
 LV_IMG_DECLARE(ui_img_sime_dying_png);    // assets/sime_dying.png
-LV_IMG_DECLARE(ui_img_unselected_camera_png);    // assets/unselected_camera.png
-LV_IMG_DECLARE(ui_img_icon_camera_png);    // assets/icon_camera.png
-LV_IMG_DECLARE(ui_img_unselected_album_png);    // assets/unselected_album.png
-LV_IMG_DECLARE(ui_img_icon_album_png);    // assets/Icon_album.png
-LV_IMG_DECLARE(ui_img_unselected_music_png);    // assets/unselected_music.png
-LV_IMG_DECLARE(ui_img_icon_music_png);    // assets/icon_music.png
-LV_IMG_DECLARE(ui_img_unselected_phone_png);    // assets/unselected_phone.png
-LV_IMG_DECLARE(ui_img_icon_phone_png);    // assets/icon_phone.png
-LV_IMG_DECLARE(ui_img_unselected_cleaning_png);    // assets/unselected_cleaning.png
-LV_IMG_DECLARE(ui_img_icon_cleaning_png);    // assets/icon_cleaning.png
-LV_IMG_DECLARE(ui_img_unselected_food_png);    // assets/unselected_food.png
-LV_IMG_DECLARE(ui_img_icon_food_png);    // assets/icon_food.png
-LV_IMG_DECLARE(ui_img_unselected_hangup_png);    // assets/unselected_hangup.png
-LV_IMG_DECLARE(ui_img_icon_hangup_png);    // assets/icon_hangup.png
+LV_IMG_DECLARE(ui_img_music_note_png);    // assets/music_note.png
+LV_IMG_DECLARE(ui_img_tata_png);    // assets/Tata.png
+LV_IMG_DECLARE(ui_img_mama_png);    // assets/Mama.png
+LV_IMG_DECLARE(ui_img_spooderman_png);    // assets/Spooderman.png
+LV_IMG_DECLARE(ui_img_barbi_png);    // assets/Barbi.png
+LV_IMG_DECLARE(ui_img_unselected_phone_red_png);    // assets/unselected_phone_red.png
+LV_IMG_DECLARE(ui_img_kontakti_png);    // assets/Kontakti.png
+LV_IMG_DECLARE(ui_img_unselected_back_arrow_png);    // assets/unselected_back_arrow.png
+LV_IMG_DECLARE(ui_img_oz_png);    // assets/Oz.png
+LV_IMG_DECLARE(ui_img_vila_png);    // assets/Vila.png
+LV_IMG_DECLARE(ui_img_parentallock_png);    // assets/ParentalLock.png
+LV_IMG_DECLARE(ui_img_rowboat_png);    // assets/rowboat.png
+LV_IMG_DECLARE(ui_img_oar_png);    // assets/oar.png
 
 // UI INIT
 void ui_init(void);

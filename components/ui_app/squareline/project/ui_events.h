@@ -10,6 +10,19 @@
 extern "C" {
 #endif
 
+void enter_weslanje_cb(lv_event_t * e);
+void enter_phone_cb(lv_event_t * e);
+void enter_music_bttn(lv_event_t * e);
+void feed_cb(lv_event_t * e);
+void clean_cb(lv_event_t * e);
+void exit_call_cb(lv_event_t * e);
+void calling_mama_cb(lv_event_t * e);
+void exit_phone_cb(lv_event_t * e);
+void calling_barbi_cb(lv_event_t * e);
+void calling_spooderman_cb(lv_event_t * e);
+void calling_tata_cb(lv_event_t * e);
+void exit_veslanje_cb(lv_event_t * e);
+
 #ifdef __cplusplus
 } /*extern "C"*/
 #endif

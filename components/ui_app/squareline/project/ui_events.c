@@ -4,43 +4,78 @@
 // Project name: esp32_gui
 
 #include "ui.h"
+#include "../../app_state.h"
+#include "../../sime.h"
+#include "../../audio.h"
 
-void dark_mode_on(lv_event_t *e)
+static volatile int _curr_song = 5;
+
+void enter_weslanje_cb(lv_event_t * e)
 {
-    // lv_color_t bg_color_white = lv_color_hex(0x111111);
-    // lv_color_t bg_color_black = lv_color_hex(0xFFFFFF);
-
-    // lv_obj_add_state(ui_Dark_Mode_Switch, LV_STATE_CHECKED);
-    // lv_obj_add_state(ui_Dark_Mode_Switch_Color, LV_STATE_CHECKED);
-    // lv_obj_add_state(ui_Dark_Mode_Switch_Sett, LV_STATE_CHECKED);
-
-    // lv_obj_set_style_text_color(ui_Dark_Mode_Label, bg_color_black, 0);
-    // lv_obj_set_style_text_color(ui_Dark_Mode_Label_Color, bg_color_black, 0);
-    // lv_obj_set_style_text_color(ui_Dark_Mode_Label_Sett, bg_color_black, 0);
-    // lv_obj_set_style_bg_color(ui_Home_Scr, bg_color_white, 0);
-    // lv_obj_set_style_bg_color(ui_Color_Scr, bg_color_white, 0);
-    // lv_obj_set_style_bg_color(ui_Settings_Scr, bg_color_white, 0);
-
-    // lv_obj_set_style_bg_color(ui_Settings_scroll_panel, bg_color_white, 0);
-    // lv_obj_set_style_border_color(ui_Settings_scroll_panel, bg_color_white, 0);
+	set_app_state(APP_STATE_WESLANJE);
 }
 
-void dark_mode_off(lv_event_t *e)
+void enter_math_cb(lv_event_t * e)
 {
-    // lv_color_t bg_color_white = lv_color_hex(0x111111);
-    // lv_color_t bg_color_black = lv_color_hex(0xFFFFFF);
+	// Your code here
+}
 
-    // lv_obj_clear_state(ui_Dark_Mode_Switch, LV_STATE_CHECKED);
-    // lv_obj_clear_state(ui_Dark_Mode_Switch_Color, LV_STATE_CHECKED);
-    // lv_obj_clear_state(ui_Dark_Mode_Switch_Sett, LV_STATE_CHECKED);
+void enter_phone_cb(lv_event_t * e)
+{
+	set_app_state(APP_STATE_CONTACTS);
+}
 
-    // lv_obj_set_style_text_color(ui_Dark_Mode_Label, bg_color_white, 0);
-    // lv_obj_set_style_text_color(ui_Dark_Mode_Label_Color, bg_color_white, 0);
-    // lv_obj_set_style_text_color(ui_Dark_Mode_Label_Sett, bg_color_white, 0);
-    // lv_obj_set_style_bg_color(ui_Home_Scr, bg_color_black, 0);
-    // lv_obj_set_style_bg_color(ui_Color_Scr, bg_color_black, 0);
-    // lv_obj_set_style_bg_color(ui_Settings_Scr, bg_color_black, 0);
+void enter_music_bttn(lv_event_t * e)
+{
+	audio_stop();
+    audio_play(0, _curr_song);
 
-    // lv_obj_set_style_bg_color(ui_Settings_scroll_panel, bg_color_black, 0);
-    // lv_obj_set_style_border_color(ui_Settings_scroll_panel, bg_color_black, 0);
+    if ((++_curr_song) > 7) {
+        _curr_song = 5;
+    }
+}
+
+void feed_cb(lv_event_t * e)
+{
+	sime_feed_half();
+}
+
+void clean_cb(lv_event_t * e)
+{
+	sime_clean();
+}
+
+void exit_call_cb(lv_event_t * e)
+{
+	set_app_state(APP_STATE_CONTACTS);
+}
+
+void calling_mama_cb(lv_event_t * e)
+{
+	set_app_state(APP_STATE_CALL_SCREEN_1);
+}
+
+void calling_tata_cb(lv_event_t * e)
+{
+	set_app_state(APP_STATE_CALL_SCREEN_2);
+}
+
+void calling_spooderman_cb(lv_event_t * e)
+{
+	set_app_state(APP_STATE_CALL_SCREEN_3);
+}
+
+void calling_barbi_cb(lv_event_t * e)
+{
+	set_app_state(APP_STATE_CALL_SCREEN_4);
+}
+
+void exit_phone_cb(lv_event_t * e)
+{
+	set_app_state(APP_STATE_HOME_SCREEN);
+}
+
+void exit_veslanje_cb(lv_event_t * e)
+{
+	set_app_state(APP_STATE_HOME_SCREEN);
 }

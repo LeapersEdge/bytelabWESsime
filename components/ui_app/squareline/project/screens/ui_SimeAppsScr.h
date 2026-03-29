@@ -19,18 +19,21 @@ extern lv_obj_t * ui_SimeContainer;
 extern lv_obj_t * ui_SimeDirtyLinesImg;
 extern lv_obj_t * ui_SimeHappyImg;
 extern lv_obj_t * ui_SimeNeutralImg;
-extern lv_obj_t * ui_SimeSadImg;
 extern lv_obj_t * ui_SimeVeryUnhappyImg;
-extern lv_obj_t * ui_SimeBttn;
+extern lv_obj_t * ui_MusicNoteImg1;
+extern lv_obj_t * ui_MusicNoteImg2;
 extern lv_obj_t * ui_AppsContainer;
-extern lv_obj_t * ui_CameraBttn;
-extern lv_obj_t * ui_GalleryBttn;
-extern lv_obj_t * ui_MusicBttn;
+extern void ui_event_WeslanjeBttn(lv_event_t * e);
+extern lv_obj_t * ui_WeslanjeBttn;
 extern void ui_event_PhoneBttn(lv_event_t * e);
 extern lv_obj_t * ui_PhoneBttn;
+extern void ui_event_MusicBttn(lv_event_t * e);
+extern lv_obj_t * ui_MusicBttn;
 extern lv_obj_t * ui_SimeActionContainer;
-extern lv_obj_t * ui_SimeCleanBttn;
-extern lv_obj_t * ui_SimeFeedBttn;
+extern void ui_event_FeedBttn(lv_event_t * e);
+extern lv_obj_t * ui_FeedBttn;
+extern void ui_event_CleanBttn(lv_event_t * e);
+extern lv_obj_t * ui_CleanBttn;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

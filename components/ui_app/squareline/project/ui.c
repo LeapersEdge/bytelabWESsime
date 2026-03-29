@@ -313,6 +313,11 @@ void ui_init(void)
     lv_disp_set_theme(dispp, theme);
     ui_SimeAppsScr_screen_init();
     ui_CallScr_screen_init();
+    ui_IntercomScr_screen_init();
+    ui_ContactsScr_screen_init();
+    ui_FeedingCameraScr_screen_init();
+    ui_ParentalLockScr_screen_init();
+    ui_RowingGameScr_screen_init();
     ui____initial_actions0 = lv_obj_create(NULL);
     lv_disp_load_scr(ui_SimeAppsScr);
 }
@@ -321,4 +326,9 @@ void ui_destroy(void)
 {
     ui_SimeAppsScr_screen_destroy();
     ui_CallScr_screen_destroy();
+    ui_IntercomScr_screen_destroy();
+    ui_ContactsScr_screen_destroy();
+    ui_FeedingCameraScr_screen_destroy();
+    ui_ParentalLockScr_screen_destroy();
+    ui_RowingGameScr_screen_destroy();
 }

@@ -7,10 +7,22 @@
 
 lv_obj_t * ui_CallScr = NULL;
 lv_obj_t * ui_BackgroundGradient = NULL;
-lv_obj_t * ui_ContactLabel = NULL;
-lv_obj_t * ui_DurationLabel = NULL;
-lv_obj_t * ui_HangBttn = NULL;
+lv_obj_t * ui_TataLabel2 = NULL;
+lv_obj_t * ui_MamaLabel2 = NULL;
+lv_obj_t * ui_SpoodermanLabel2 = NULL;
+lv_obj_t * ui_BarbiLabel2 = NULL;
+lv_obj_t * ui_Image2 = NULL;
+lv_obj_t * ui_ExitContactsBttn2 = NULL;
+lv_obj_t * ui_SimeNeutralImg3 = NULL;
 // event funtions
+void ui_event_ExitContactsBttn2(lv_event_t * e)
+{
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+    if(event_code == LV_EVENT_CLICKED) {
+        exit_call_cb(e);
+    }
+}
 
 // build funtions
 
@@ -25,38 +37,91 @@ void ui_CallScr_screen_init(void)
     lv_obj_set_align(ui_BackgroundGradient, LV_ALIGN_CENTER);
     lv_obj_clear_flag(ui_BackgroundGradient, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
     lv_obj_set_style_radius(ui_BackgroundGradient, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_grad_color(ui_BackgroundGradient, lv_color_hex(0x271BE3), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_BackgroundGradient, lv_color_hex(0x271BE3), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_BackgroundGradient, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_grad_color(ui_BackgroundGradient, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_main_stop(ui_BackgroundGradient, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_stop(ui_BackgroundGradient, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_grad_dir(ui_BackgroundGradient, LV_GRAD_DIR_VER, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_grad_dir(ui_BackgroundGradient, LV_GRAD_DIR_HOR, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_BackgroundGradient, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
 
-    ui_ContactLabel = lv_label_create(ui_CallScr);
-    lv_obj_set_width(ui_ContactLabel, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_ContactLabel, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_ContactLabel, 0);
-    lv_obj_set_y(ui_ContactLabel, 64);
-    lv_obj_set_align(ui_ContactLabel, LV_ALIGN_TOP_MID);
-    lv_label_set_long_mode(ui_ContactLabel, LV_LABEL_LONG_SCROLL_CIRCULAR);
-    lv_label_set_text(ui_ContactLabel, "Mama");
+    ui_TataLabel2 = lv_img_create(ui_CallScr);
+    lv_img_set_src(ui_TataLabel2, &ui_img_tata_png);
+    lv_obj_set_width(ui_TataLabel2, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_TataLabel2, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_TataLabel2, -68);
+    lv_obj_set_y(ui_TataLabel2, 0);
+    lv_obj_set_align(ui_TataLabel2, LV_ALIGN_RIGHT_MID);
+    lv_obj_add_flag(ui_TataLabel2, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_TataLabel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_DurationLabel = lv_label_create(ui_CallScr);
-    lv_obj_set_width(ui_DurationLabel, LV_SIZE_CONTENT);   /// 1
-    lv_obj_set_height(ui_DurationLabel, LV_SIZE_CONTENT);    /// 1
-    lv_obj_set_x(ui_DurationLabel, 0);
-    lv_obj_set_y(ui_DurationLabel, 84);
-    lv_obj_set_align(ui_DurationLabel, LV_ALIGN_TOP_MID);
-    lv_label_set_text(ui_DurationLabel, "00:30");
-    lv_obj_set_style_text_color(ui_DurationLabel, lv_color_hex(0x4C4C4C), LV_PART_MAIN | LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui_DurationLabel, 255, LV_PART_MAIN | LV_STATE_DEFAULT);
+    ui_MamaLabel2 = lv_img_create(ui_CallScr);
+    lv_img_set_src(ui_MamaLabel2, &ui_img_mama_png);
+    lv_obj_set_width(ui_MamaLabel2, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_MamaLabel2, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_MamaLabel2, -68);
+    lv_obj_set_y(ui_MamaLabel2, 0);
+    lv_obj_set_align(ui_MamaLabel2, LV_ALIGN_RIGHT_MID);
+    lv_obj_add_flag(ui_MamaLabel2, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_MamaLabel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
 
-    ui_HangBttn = lv_imgbtn_create(ui_CallScr);
-    lv_imgbtn_set_src(ui_HangBttn, LV_IMGBTN_STATE_RELEASED, NULL, &ui_img_unselected_hangup_png, NULL);
-    lv_imgbtn_set_src(ui_HangBttn, LV_IMGBTN_STATE_PRESSED, NULL, &ui_img_icon_hangup_png, NULL);
-    lv_obj_set_width(ui_HangBttn, 64);
-    lv_obj_set_height(ui_HangBttn, 64);
-    lv_obj_set_x(ui_HangBttn, 0);
-    lv_obj_set_y(ui_HangBttn, -32);
-    lv_obj_set_align(ui_HangBttn, LV_ALIGN_BOTTOM_MID);
+    ui_SpoodermanLabel2 = lv_img_create(ui_CallScr);
+    lv_img_set_src(ui_SpoodermanLabel2, &ui_img_spooderman_png);
+    lv_obj_set_width(ui_SpoodermanLabel2, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_height(ui_SpoodermanLabel2, LV_SIZE_CONTENT);    /// 1
+    lv_obj_set_x(ui_SpoodermanLabel2, -68);
+    lv_obj_set_y(ui_SpoodermanLabel2, 0);
+    lv_obj_set_align(ui_SpoodermanLabel2, LV_ALIGN_RIGHT_MID);
+    lv_obj_add_flag(ui_SpoodermanLabel2, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_SpoodermanLabel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_BarbiLabel2 = lv_img_create(ui_CallScr);
+    lv_img_set_src(ui_BarbiLabel2, &ui_img_barbi_png);
+    lv_obj_set_height(ui_BarbiLabel2, 84);
+    lv_obj_set_width(ui_BarbiLabel2, LV_SIZE_CONTENT);   /// 1
+    lv_obj_set_x(ui_BarbiLabel2, -68);
+    lv_obj_set_y(ui_BarbiLabel2, 0);
+    lv_obj_set_align(ui_BarbiLabel2, LV_ALIGN_RIGHT_MID);
+    lv_obj_add_flag(ui_BarbiLabel2, LV_OBJ_FLAG_HIDDEN | LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_BarbiLabel2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_Image2 = lv_img_create(ui_CallScr);
+    lv_img_set_src(ui_Image2, &ui_img_unselected_phone_red_png);
+    lv_obj_set_width(ui_Image2, LV_SIZE_CONTENT);   /// 64
+    lv_obj_set_height(ui_Image2, LV_SIZE_CONTENT);    /// 64
+    lv_obj_set_x(ui_Image2, 32);
+    lv_obj_set_y(ui_Image2, 0);
+    lv_obj_set_align(ui_Image2, LV_ALIGN_LEFT_MID);
+    lv_obj_add_flag(ui_Image2, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_Image2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    ui_ExitContactsBttn2 = lv_obj_create(ui_CallScr);
+    lv_obj_set_width(ui_ExitContactsBttn2, 64);
+    lv_obj_set_height(ui_ExitContactsBttn2, 64);
+    lv_obj_set_x(ui_ExitContactsBttn2, 32);
+    lv_obj_set_y(ui_ExitContactsBttn2, 0);
+    lv_obj_set_align(ui_ExitContactsBttn2, LV_ALIGN_LEFT_MID);
+    lv_obj_clear_flag(ui_ExitContactsBttn2, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+    lv_obj_set_style_radius(ui_ExitContactsBttn2, 16, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_color(ui_ExitContactsBttn2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui_ExitContactsBttn2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui_ExitContactsBttn2, 0, LV_PART_MAIN | LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(ui_ExitContactsBttn2, 16, LV_PART_MAIN | LV_STATE_PRESSED);
+    lv_obj_set_style_bg_color(ui_ExitContactsBttn2, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_PRESSED);
+    lv_obj_set_style_bg_opa(ui_ExitContactsBttn2, 80, LV_PART_MAIN | LV_STATE_PRESSED);
+    lv_obj_set_style_border_width(ui_ExitContactsBttn2, 0, LV_PART_MAIN | LV_STATE_PRESSED);
+
+    ui_SimeNeutralImg3 = lv_img_create(ui_CallScr);
+    lv_img_set_src(ui_SimeNeutralImg3, &ui_img_sime_neutral_png);
+    lv_obj_set_width(ui_SimeNeutralImg3, LV_SIZE_CONTENT);   /// 96
+    lv_obj_set_height(ui_SimeNeutralImg3, LV_SIZE_CONTENT);    /// 96
+    lv_obj_set_x(ui_SimeNeutralImg3, -13);
+    lv_obj_set_y(ui_SimeNeutralImg3, 86);
+    lv_obj_set_align(ui_SimeNeutralImg3, LV_ALIGN_LEFT_MID);
+    lv_obj_add_flag(ui_SimeNeutralImg3, LV_OBJ_FLAG_ADV_HITTEST);     /// Flags
+    lv_obj_clear_flag(ui_SimeNeutralImg3, LV_OBJ_FLAG_SCROLLABLE);      /// Flags
+
+    lv_obj_add_event_cb(ui_ExitContactsBttn2, ui_event_ExitContactsBttn2, LV_EVENT_ALL, NULL);
 
 }
 
@@ -67,8 +132,12 @@ void ui_CallScr_screen_destroy(void)
     // NULL screen variables
     ui_CallScr = NULL;
     ui_BackgroundGradient = NULL;
-    ui_ContactLabel = NULL;
-    ui_DurationLabel = NULL;
-    ui_HangBttn = NULL;
+    ui_TataLabel2 = NULL;
+    ui_MamaLabel2 = NULL;
+    ui_SpoodermanLabel2 = NULL;
+    ui_BarbiLabel2 = NULL;
+    ui_Image2 = NULL;
+    ui_ExitContactsBttn2 = NULL;
+    ui_SimeNeutralImg3 = NULL;
 
 }
